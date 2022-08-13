@@ -150,3 +150,7 @@ body {
     max-width: 216px;
   }
 }
+
+textarea.form-control {
+  resize: none;
+}
