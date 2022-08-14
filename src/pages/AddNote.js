@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, Form, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import { API_ENDPOINT, apiOptions } from '../api/notesApi';
 import { useNavigate } from 'react-router';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import Loading from '../components/Loading';
+import axios from 'axios';
+
+const Alert = withReactContent(Swal);
 
 const StyledDiv = styled.div`
   display: block;
@@ -12,9 +18,11 @@ const StyledDiv = styled.div`
 
 const AddNote = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const form = new FormData(e.currentTarget);
     const data = {
       title: form.get('title'),
@@ -22,23 +30,26 @@ const AddNote = () => {
       user_id: 1
     };
 
-    apiOptions.method = 'POST';
-    apiOptions.body = JSON.stringify(data);
-    
-    const result = await fetch(API_ENDPOINT.NOTES.LIST, apiOptions)
-      .then(response => response.json())
-      .catch(error => console.error(error));
-    
-    if (result.success) {
-      alert('Success');
-      navigate('/');
-    } else {
-      alert(result.message);
+    try {
+      const response = await axios.post(API_ENDPOINT.NOTES.LIST, data, apiOptions);
+      const result = response.data;
+      
+      if (result.success) {
+        setLoading(false);
+        Alert.fire('Success', result.message, 'success')
+          .then(() => navigate('/'));
+      } else {
+        setLoading(false);
+        Alert.fire('Oops', result.message, 'error');
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
   return (
     <StyledDiv>
+      <Loading isOpen={loading} />
       <Card className='rounded'>
         <Card.Header>
           <Card.Title className='pt-2'>Add New Note</Card.Title>
