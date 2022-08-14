@@ -10,7 +10,7 @@ const MenuBar = () => {
       defaultActiveKey="/home"
       className='justify-content-between p-3 bg-white rounded-pill align-items-center'
     >
-      <NavItem text='All Notes' action='/all-notes' />
+      <NavItem text='All Notes' action='/' />
       <NavItem text='Add New Note' action='/add-notes' />
     </Nav>
   );
