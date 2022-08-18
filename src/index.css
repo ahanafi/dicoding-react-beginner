@@ -154,3 +154,33 @@ body {
 textarea.form-control {
   resize: none;
 }
+
+.ml-auto {
+  margin-left: auto !important;
+}
+
+.input-group > input {
+  width: 25rem !important;
+  border-top-left-radius: 1.5rem !important;
+  border-bottom-left-radius: 1.5rem !important;
+  border-right: 0;
+  border-color: #86b7fe;
+}
+
+.input-group > input:focus {
+  box-shadow: none;
+}
+
+.input-group > button {
+  border-top-right-radius: 1.5rem !important;
+  border-bottom-right-radius: 1.5rem !important;
+  border-left: 0;
+  border-color: #86b7fe;
+  color: #86b7fe;
+}
+
+.input-group > button:hover {
+  background: #fff;
+  border-color: #86b7fe;
+  color: #86b7fe;
+}
