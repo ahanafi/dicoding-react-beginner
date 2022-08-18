@@ -2,13 +2,15 @@ import React from 'react'
 import { Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const NavItem = ({ text, action }) => {
+const NavItem = ({ text, action, isActive = false}) => {
   return (
     <Nav.Item as='li'>
       <Nav.Link
         as={Link}
         to={action}
-        className={'rounded-pill note-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2 active'}
+        className={
+          `rounded-pill note-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2 ${isActive ? 'active' : ''}`
+        }
         >
         {text}
       </Nav.Link>

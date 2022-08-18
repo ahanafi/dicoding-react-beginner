@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Card, Form, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 import { API_ENDPOINT, apiOptions } from '../api/notesApi';

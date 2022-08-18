@@ -10,6 +10,7 @@ const API_ENDPOINT = {
   },
   NOTES: {
     LIST: `${noteApiBaseUrl}/notes`,
+    ARCHIVED: `${noteApiBaseUrl}/notes/archived`,
     DETAIL: (noteId) => `${noteApiBaseUrl}/notes/${noteId}`,
     UPDATE: (noteId) => `${noteApiBaseUrl}/notes/${noteId}`,
     DELETE: (noteId) => `${noteApiBaseUrl}/notes/${noteId}`,
