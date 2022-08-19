@@ -1,8 +1,7 @@
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react'
-import { InputGroup, Button, Form, Nav } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 import NavItem from './NavItem';
+import SearchBar from './SearchBar';
 
 const MenuBar = () => {
   return (
@@ -17,14 +16,7 @@ const MenuBar = () => {
       <NavItem text='Add New Note' action='/add-notes' />
 
       <li className='nav-item ml-auto'>
-        <InputGroup>
-          <Form.Control
-            placeholder='Search notes here...'
-          />
-          <Button variant="outline-primary">
-            <FontAwesomeIcon icon={faSearch} />
-          </Button>
-        </InputGroup>
+        <SearchBar />
       </li>
     </Nav>
   );
