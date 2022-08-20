@@ -2,7 +2,7 @@ import React from 'react'
 import { Nav } from 'react-bootstrap';
 import SearchBar from './SearchBar';
 
-const MenuBar = ({ setDisplayForm }) => {
+const MenuBar = ({ setDisplayForm, searchNote }) => {
   return (
     <Nav
       as='ul'
@@ -21,7 +21,7 @@ const MenuBar = ({ setDisplayForm }) => {
       </Nav.Item>
 
       <li className='nav-item ml-auto'>
-        <SearchBar />
+        <SearchBar searchNote={searchNote} />
       </li>
     </Nav>
   );

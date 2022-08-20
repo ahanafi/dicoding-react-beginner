@@ -55,11 +55,11 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
                   Remain Character: <span>50</span>
                 </Form.Label>
               </div>
-              <Form.Control ref={inputTitle} maxLength={50} size='lg' type='text' placeholder='Title...' />
+              <Form.Control autoComplete='off' ref={inputTitle} maxLength={50} size='lg' type='text' placeholder='Title...' />
             </Form.Group>
             <Form.Group className='mb-3' controlId='exampleForm.ControlTextarea1'>
               <Form.Label>Body</Form.Label>
-              <Form.Control ref={inputBody} placeholder='Write your note here...' size='lg' as='textarea' rows={5} />
+              <Form.Control autoComplete='off' ref={inputBody} placeholder='Write your note here...' size='lg' as='textarea' rows={5} />
             </Form.Group>
             <div className='d-flex justify-content-end'>
             <Button type='button' onClick={handleSubmit} variant='primary' size='lg'>Submit</Button>
