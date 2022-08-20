@@ -22,6 +22,17 @@ const NoteApp = () => {
     setNote(newNotes);
   }
 
+  const archiveNote = (noteId) => {
+    const newNotes = notes.map(note => {
+      if (note.id === noteId) {
+        note.archived = note.archived === false ? true : false;
+      }
+      return note;
+    });
+
+    setNote(newNotes);
+  }
+
   return (
     <Container>
       <MenuBar setDisplayForm={handleDisplayForm} />
@@ -32,10 +43,20 @@ const NoteApp = () => {
         addNoteEvent={handleAddNote}
         />
 
-      <h2 className='fw-bold text-white mb-4 fs-2'>All Notes</h2>
+      {/* Active Notes */}
+      <h2 className='fw-bold text-white mb-4 fs-2'>Active Notes</h2>
       <NoteList
-        notes={notes}
+        notes={notes.filter(note => note.archived !== true)}
         deleteNote={deleteNote}
+        archiveNote={archiveNote}
+      />
+
+      {/* Archived Notes */}
+      <h2 className='fw-bold text-white mb-4 fs-2'>Archived Notes</h2>
+      <NoteList
+        notes={notes.filter(note => note.archived !== false)}
+        deleteNote={deleteNote}
+        archiveNote={archiveNote}
       />
     </Container>
   );
