@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InputGroup, Button, Form } from 'react-bootstrap';
@@ -6,7 +6,7 @@ import { InputGroup, Button, Form } from 'react-bootstrap';
 const SearchBar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
-    const value = e.target.value;
+    // TODO:: Searching here...
   }
 
   return (
