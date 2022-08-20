@@ -1,15 +1,10 @@
 import React, { useState } from 'react'
 import { Card, Form, Button } from 'react-bootstrap';
-import styled from 'styled-components';
 import Loading from './Loading';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 
-const StyledDiv = styled.div`
-  display: block;
-  width: 100%;
-  margin-top:3rem;
-`;
-
-const AddNote = () => {
+const NoteForm = ({ style, setDisplayForm }) => {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -18,11 +13,15 @@ const AddNote = () => {
   }
 
   return (
-    <StyledDiv>
+    <div style={style} className='w-100 mt-5'>
       <Loading isOpen={loading} />
       <Card className='rounded'>
-        <Card.Header>
+        <Card.Header className='d-flex justify-content-between'>
           <Card.Title className='pt-2'>Add New Note</Card.Title>
+          <Button onClick={() => setDisplayForm(false)} variant='secondary' className='px-3' size='sm'>
+            <FontAwesomeIcon icon={faClose} />
+            <span className='ms-2'>Close Form</span>
+          </Button>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={handleSubmit} method='post'>
@@ -45,8 +44,8 @@ const AddNote = () => {
           </Form>
         </Card.Body>
       </Card>
-    </StyledDiv>
+    </div>
   );
 }
 
-export default AddNote;
+export default NoteForm;

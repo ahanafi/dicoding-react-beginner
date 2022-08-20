@@ -2,7 +2,7 @@ import React from 'react'
 import { Nav } from 'react-bootstrap';
 import SearchBar from './SearchBar';
 
-const MenuBar = () => {
+const MenuBar = ({ setDisplayForm }) => {
   return (
     <Nav
       as='ul'
@@ -13,6 +13,7 @@ const MenuBar = () => {
       <Nav.Item as='li'>
         <Nav.Link
           as='button'
+          onClick={() => setDisplayForm(true)}
           className={`rounded-pill note-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2 active`}
           >
           Add Notes

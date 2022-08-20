@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import MenuBar from './MenuBar';
 import { getInitialData } from '../utils/data';
@@ -6,11 +7,21 @@ import NoteForm from './NoteForm';
 
 const NoteApp = () => {
   const notes = getInitialData();
+  const [displayForm, setDisplayForm] = useState(false);
+
+  const handleDisplayForm = (display) => {
+    setDisplayForm(display);
+    console.log(display);
+  }
+
   return (
     <Container>
-      <MenuBar />
+      <MenuBar setDisplayForm={handleDisplayForm} />
 
-      <NoteForm />
+      <NoteForm
+        style={{ display: displayForm ? 'block' : 'none'}}
+        setDisplayForm={handleDisplayForm}
+        />
 
       <h2 className='fw-bold text-white mb-4 fs-2'>All Notes</h2>
       <NoteList notes={notes} />
