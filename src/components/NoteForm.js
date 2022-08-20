@@ -38,7 +38,8 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
   };
 
   const charCounter = () => {
-    const remainChar = maxChar - parseInt(inputTitle.current.value.length);
+    inputTitle.current.value = inputTitle.current.value.slice(0, maxChar);
+    const remainChar = parseInt(maxChar) - parseInt(inputTitle.current.value.length);
     setCounter(remainChar);
   }
 
@@ -62,7 +63,7 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
                   Remain Character: <span>{counter}</span>
                 </Form.Label>
               </div>
-              <Form.Control autoComplete='off' onChange={charCounter} ref={inputTitle} maxLength={maxChar} size='lg' type='text' placeholder='Title...' />
+              <Form.Control autoComplete='off' onChange={charCounter} ref={inputTitle} size='lg' type='text' placeholder='Title...' />
             </Form.Group>
             <Form.Group className='mb-3' controlId='exampleForm.ControlTextarea1'>
               <Form.Label>Body</Form.Label>
