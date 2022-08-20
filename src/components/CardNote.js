@@ -4,7 +4,7 @@ import React from 'react'
 import { Card, Col, Button } from 'react-bootstrap';
 import { showFormattedDate } from '../utils/data';
 
-const CardNote = ({ note }) => {
+const CardNote = ({ note, deleteNote }) => {
   return (
     <Col md={4} className='col-md-4 single-note-item'>
       <Card>
@@ -21,7 +21,7 @@ const CardNote = ({ note }) => {
                 <FontAwesomeIcon className='text-warning' icon={faArchive} />
                 <span className='ms-2'>Archive Note</span>
               </Button>
-              <Button type='button' variant='danger'>
+              <Button onClick={() => deleteNote(note.id)} type='button' variant='danger'>
                 <FontAwesomeIcon className='remove-note' icon={faTrash} />
                 <span className='ms-2'>Delete Note</span>
               </Button>

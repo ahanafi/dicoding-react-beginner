@@ -17,6 +17,11 @@ const NoteApp = () => {
     setNote(notes);
   };
 
+  const deleteNote = (noteId) => {
+    const newNotes = notes.filter(note => note.id !== noteId);
+    setNote(newNotes);
+  }
+
   return (
     <Container>
       <MenuBar setDisplayForm={handleDisplayForm} />
@@ -28,7 +33,10 @@ const NoteApp = () => {
         />
 
       <h2 className='fw-bold text-white mb-4 fs-2'>All Notes</h2>
-      <NoteList notes={notes} />
+      <NoteList
+        notes={notes}
+        deleteNote={deleteNote}
+      />
     </Container>
   );
 }

@@ -3,7 +3,7 @@ import { Row } from 'react-bootstrap';
 import CardNote from './CardNote';
 import Loading from './Loading';
 
-const NoteList = ({ notes }) => {
+const NoteList = ({ notes, deleteNote }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +16,11 @@ const NoteList = ({ notes }) => {
       <Row id='note-full-container' className='note-has-grid mt-3'>
         {notes.length > 0 ? (
             notes.map(note => (
-              <CardNote key={note.id} note={note} />
+              <CardNote
+                key={note.id}
+                note={note}
+                deleteNote={deleteNote}
+                />
             )
           )
         ) : (
