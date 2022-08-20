@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faTrash, faUndo } from '@fortawesome/free-solid-svg-icons';
 import React from 'react'
 import { Card, Col, Button } from 'react-bootstrap';
-import { showFormattedDate } from '../utils/data';
+import { showFormattedDate } from '../utils/helper';
 
 const NoteItem = ({ note, deleteNote, archiveNote }) => {
   return (

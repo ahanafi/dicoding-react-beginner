@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { Container } from 'react-bootstrap';
 import MenuBar from './MenuBar';
-import { getInitialData } from '../utils/data';
 import NoteList from './NoteList';
 import NoteForm from './NoteForm';
+import notesData from '../utils/notes.json';
 
 const NoteApp = () => {
-  const initialData = getInitialData();
+  const initialData = notesData;
   const [notes, setNote] = useState(initialData);
   const [displayForm, setDisplayForm] = useState(false);
   const activeNoteElements = useRef();
