@@ -6,6 +6,8 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
   const [loading, setLoading] = useState(false);
+  const maxChar = 50;
+  const [counter, setCounter] = useState(maxChar);
   const inputTitle = useRef();
   const inputBody = useRef();
 
@@ -35,6 +37,11 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
     inputBody.current.value = '';
   };
 
+  const charCounter = () => {
+    const remainChar = maxChar - parseInt(inputTitle.current.value.length);
+    setCounter(remainChar);
+  }
+
   return (
     <div style={style} className='w-100 mt-5'>
       <Loading isOpen={loading} />
@@ -52,10 +59,10 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
               <div className='d-flex justify-content-between'>
                 <Form.Label>Title</Form.Label>
                 <Form.Label>
-                  Remain Character: <span>50</span>
+                  Remain Character: <span>{counter}</span>
                 </Form.Label>
               </div>
-              <Form.Control autoComplete='off' ref={inputTitle} maxLength={50} size='lg' type='text' placeholder='Title...' />
+              <Form.Control autoComplete='off' onChange={charCounter} ref={inputTitle} maxLength={maxChar} size='lg' type='text' placeholder='Title...' />
             </Form.Group>
             <Form.Group className='mb-3' controlId='exampleForm.ControlTextarea1'>
               <Form.Label>Body</Form.Label>
