@@ -1,18 +1,15 @@
 import React, { useState, useRef } from 'react'
 import { Card, Form, Button } from 'react-bootstrap';
-import Loading from './Loading';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
-  const [loading, setLoading] = useState(false);
   const maxChar = 50;
   const [counter, setCounter] = useState(maxChar);
   const inputTitle = useRef();
   const inputBody = useRef();
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
     const note = {
       id: +new Date(),
@@ -23,13 +20,8 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
     }
 
     addNoteEvent(note);
-    
-    setTimeout(() => {
-      setLoading(false);
-      resetForm();
-      setDisplayForm(false);
-    }, 500);
-
+    resetForm();
+    setDisplayForm(false);
   }
 
   const resetForm = () => {
@@ -45,7 +37,6 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
 
   return (
     <div style={style} className='w-100 mt-5'>
-      <Loading isOpen={loading} />
       <Card className='rounded'>
         <Card.Header className='d-flex justify-content-between'>
           <Card.Title className='pt-2'>Add New Note</Card.Title>
