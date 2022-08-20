@@ -4,7 +4,7 @@ import React from 'react'
 import { Card, Col, Button } from 'react-bootstrap';
 import { showFormattedDate } from '../utils/data';
 
-const CardNote = ({ note, deleteNote }) => {
+const NoteItem = ({ note, deleteNote }) => {
   return (
     <Col md={4} className='col-md-4 single-note-item'>
       <Card>
@@ -32,4 +32,4 @@ const CardNote = ({ note, deleteNote }) => {
   );
 }
 
-export default CardNote;
+export default NoteItem;

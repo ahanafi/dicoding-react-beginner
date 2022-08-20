@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap';
-import CardNote from './CardNote';
+import NoteItem from './NoteItem';
 import Loading from './Loading';
 
 const NoteList = ({ notes, deleteNote }) => {
@@ -16,7 +16,7 @@ const NoteList = ({ notes, deleteNote }) => {
       <Row id='note-full-container' className='note-has-grid mt-3'>
         {notes.length > 0 ? (
             notes.map(note => (
-              <CardNote
+              <NoteItem
                 key={note.id}
                 note={note}
                 deleteNote={deleteNote}
