@@ -6,13 +6,16 @@ import NoteList from './NoteList';
 import NoteForm from './NoteForm';
 
 const NoteApp = () => {
-  const notes = getInitialData();
+  const initialData = getInitialData();
+  const [notes, setNote] = useState(initialData);
   const [displayForm, setDisplayForm] = useState(false);
 
-  const handleDisplayForm = (display) => {
-    setDisplayForm(display);
-    console.log(display);
-  }
+  const handleDisplayForm = (display) => setDisplayForm(display);
+
+  const handleAddNote = (note) => {
+    notes.push(note);
+    setNote(notes);
+  };
 
   return (
     <Container>
@@ -21,6 +24,7 @@ const NoteApp = () => {
       <NoteForm
         style={{ display: displayForm ? 'block' : 'none'}}
         setDisplayForm={handleDisplayForm}
+        addNoteEvent={handleAddNote}
         />
 
       <h2 className='fw-bold text-white mb-4 fs-2'>All Notes</h2>

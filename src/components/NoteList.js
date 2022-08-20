@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row } from 'react-bootstrap';
 import CardNote from './CardNote';
-// import Loading from './Loading';
+import Loading from './Loading';
 
 const NoteList = ({ notes }) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 500);
+  }, [])
+
   return (
     <>
-      {/* <Loading isOpen={loading} /> */}
+      <Loading isOpen={loading} />
       <Row id='note-full-container' className='note-has-grid mt-3'>
         {notes.length > 0 ? (
             notes.map(note => (
