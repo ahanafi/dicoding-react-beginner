@@ -12,11 +12,9 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const note = {
-      id: +new Date(),
       title: inputTitle.current.value,
       body: inputBody.current.value,
-      archived: false,
-      creatdAt: new Date()
+      user_id: 1
     }
 
     addNoteEvent(note);

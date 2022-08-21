@@ -49,11 +49,22 @@ const NoteApp = () => {
 
   const handleDisplayForm = (display) => setDisplayForm(display);
 
-  const handleAddNote = (note) => {
+  const handleAddNote = async (note) => {
     setLoading(true);
-    notes.push(note);
-    setNotes(notes);
-    showAlert('Success', 'The note was succesfully inserted!');
+    try {
+      const response = await axios.post(API_ENDPOINT.NOTES.LIST, note, apiOptions);
+      const result = response.data;
+      
+      if (result.success) {
+        setLoading(false);
+        showAlert('Success', result.message);
+      } else {
+        setLoading(false);
+        showAlert('Oops', result.message, 'error');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const deleteNote = (noteId) => {
