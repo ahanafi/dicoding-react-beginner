@@ -65,27 +65,39 @@ const NoteApp = () => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const deleteNote = async (noteId) => {
-    setLoading(true);
-    try {
-      const response = await axios.delete(API_ENDPOINT.NOTES.DELETE(noteId), apiOptions);
-      const result = response.data;
-      
-      if (result.success) {
-        setLoading(false);
-        showAlert('Success', result.message);
-      } else {
-        setLoading(false);
-        showAlert('Oops', result.message, 'error');
-      }
-    } catch (error) {
-      console.error(error);
-    }
 
     getActiveNotes();
     getArchivedNotes();
+  };
+
+  const deleteNote = async (noteId) => {
+    Alert.fire({
+      title:'Confirm Deletion',
+      text:'Are you sure want to delete this?',
+      icon: 'question',
+      showCancelButton: true,
+    }).then( async (result) => {
+      if (result.isConfirmed) {
+        setLoading(true);
+        try {
+          const response = await axios.delete(API_ENDPOINT.NOTES.DELETE(noteId), apiOptions);
+          const result = response.data;
+          
+          if (result.success) {
+            setLoading(false);
+            showAlert('Success', result.message);
+          } else {
+            setLoading(false);
+            showAlert('Oops', result.message, 'error');
+          }
+        } catch (error) {
+          console.error(error);
+        }
+    
+        getActiveNotes();
+        getArchivedNotes();
+      }
+    })
   }
 
   const archiveNote = async (noteId) => {
