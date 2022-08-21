@@ -83,25 +83,37 @@ const NoteApp = () => {
     } catch (error) {
       console.error(error);
     }
-    
+
     getActiveNotes();
     getArchivedNotes();
   }
 
-  const archiveNote = (noteId) => {
+  const archiveNote = async (noteId) => {
     setLoading(true);
-    const isArchived = notes.filter(note => note.id === noteId)[0].archived;
-    const message = isArchived ? 'The note was successfully changed to active!' : 'The note was successfully archived!';
-
-    const newNotes = notes.map(note => {
-      if (note.id === noteId) {
-        note.is_archived = note.is_archived === 0 ? 1 : 0;
+    const response = await axios.get(API_ENDPOINT.NOTES.DETAIL(noteId), apiOptions);
+    const note = response.data.data;
+    const message = note.is_archived === 1 ? 'The note was successfully changed to active!' : 'The note was successfully archived!';
+    
+    note.is_archived = note.is_archived === 0 ? 1 : 0;
+    note.user_id = 1; // TODO: Change it later when it was integrated with user
+    
+    try {
+      const response = await axios.put(API_ENDPOINT.NOTES.UPDATE(noteId), note, apiOptions);
+      const result = response.data;
+      
+      if (result.success) {
+        setLoading(false);
+        showAlert('Success', message);
+      } else {
+        setLoading(false);
+        showAlert('Oops', response.message, 'error');
       }
-      return note;
-    });
+    } catch (error) {
+      console.error(error);
+    }
 
-    setNotes(newNotes);
-    showAlert('Success', message);
+    getActiveNotes();
+    getArchivedNotes();
   }
   
   const searchNote = (query) => {
