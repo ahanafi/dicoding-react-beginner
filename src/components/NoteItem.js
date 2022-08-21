@@ -12,7 +12,7 @@ const NoteItem = ({ note, deleteNote, archiveNote }) => {
           <h5 className='note-title text-truncate w-75 mb-0'>
             { note.title }
           </h5>
-          <p className='note-date font-12 text-muted'>{ showFormattedDate(note.createdAt) }</p>
+          <p className='note-date font-12 text-muted'>{ showFormattedDate(note.created_at) }</p>
           <div className='note-content'>
             <p className='note-inner-content text-muted'>{ note.body.substring(0, 250) + '...' }</p>
           </div>
