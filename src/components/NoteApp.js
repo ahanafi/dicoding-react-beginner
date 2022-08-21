@@ -67,11 +67,25 @@ const NoteApp = () => {
     }
   };
 
-  const deleteNote = (noteId) => {
+  const deleteNote = async (noteId) => {
     setLoading(true);
-    const newNotes = notes.filter(note => note.id !== noteId);
-    setNotes(newNotes);
-    showAlert('Success', 'The note was succesfully deleted!');
+    try {
+      const response = await axios.delete(API_ENDPOINT.NOTES.DELETE(noteId), apiOptions);
+      const result = response.data;
+      
+      if (result.success) {
+        setLoading(false);
+        showAlert('Success', result.message);
+      } else {
+        setLoading(false);
+        showAlert('Oops', result.message, 'error');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    
+    getActiveNotes();
+    getArchivedNotes();
   }
 
   const archiveNote = (noteId) => {
