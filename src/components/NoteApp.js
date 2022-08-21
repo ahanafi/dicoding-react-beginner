@@ -3,14 +3,15 @@ import { Container } from 'react-bootstrap';
 import MenuBar from './MenuBar';
 import NoteList from './NoteList';
 import NoteForm from './NoteForm';
-import notesData from '../utils/notes.json';
 import Loading from './Loading';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { API_ENDPOINT, apiOptions } from '../api/noteApi';
+import axios from 'axios';
 
 const NoteApp = () => {
-  const initialData = notesData;
-  const [notes, setNote] = useState(initialData);
+  const [notes, setNotes] = useState([]);
+  const [archivedNotes, setArchivedNotes] = useState([]);
   const [displayForm, setDisplayForm] = useState(false);
   const activeNoteElements = useRef();
   const archivedNoteElements = useRef();
@@ -18,24 +19,47 @@ const NoteApp = () => {
   const Alert = withReactContent(Swal);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+    getActiveNotes(); // active notes
+    getArchivedNotes(); // archived notes
+
+     //eslint-disable-next-line
   }, [])
+
+  const getAllNotes = async (isArchived) => {
+    setLoading(true);
+    const url = isArchived ? API_ENDPOINT.NOTES.ARCHIVED : API_ENDPOINT.NOTES.LIST;
+    try {
+      const response = await axios.get(url, apiOptions);
+      const results = response.data.data;
+      
+      if (isArchived) {
+        setArchivedNotes(results.data);
+      } else {
+        setNotes(results.data);
+      }
+      
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getActiveNotes = async () => getAllNotes(false);
+  const getArchivedNotes = async () => getAllNotes(true);
 
   const handleDisplayForm = (display) => setDisplayForm(display);
 
   const handleAddNote = (note) => {
     setLoading(true);
     notes.push(note);
-    setNote(notes);
+    setNotes(notes);
     showAlert('Success', 'The note was succesfully inserted!');
   };
 
   const deleteNote = (noteId) => {
     setLoading(true);
     const newNotes = notes.filter(note => note.id !== noteId);
-    setNote(newNotes);
+    setNotes(newNotes);
     showAlert('Success', 'The note was succesfully deleted!');
   }
 
@@ -46,12 +70,12 @@ const NoteApp = () => {
 
     const newNotes = notes.map(note => {
       if (note.id === noteId) {
-        note.archived = note.archived === false ? true : false;
+        note.is_archived = note.is_archived === 0 ? 1 : 0;
       }
       return note;
     });
 
-    setNote(newNotes);
+    setNotes(newNotes);
     showAlert('Success', message);
   }
   
@@ -98,7 +122,7 @@ const NoteApp = () => {
         <NoteList
           ref={activeNoteElements}
           id='active-note-list'
-          notes={notes.filter(note => note.archived !== true)}
+          notes={notes}
           deleteNote={deleteNote}
           archiveNote={archiveNote}
         />
@@ -108,7 +132,7 @@ const NoteApp = () => {
         <NoteList
           ref={archivedNoteElements}
           id='archived-note-list'
-          notes={notes.filter(note => note.archived !== false)}
+          notes={archivedNotes}
           deleteNote={deleteNote}
           archiveNote={archiveNote}
         />
