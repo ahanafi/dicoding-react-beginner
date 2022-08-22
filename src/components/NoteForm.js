@@ -16,7 +16,7 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
       title: inputTitle.current.value,
       body: inputBody.current.value,
       archived: false,
-      creatdAt: new Date()
+      createdAt: new Date()
     }
 
     addNoteEvent(note);
