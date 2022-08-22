@@ -7,6 +7,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { API_ENDPOINT, apiOptions } from '../api/noteApi';
 import axios from 'axios';
 import Router from '../routes/router';
+import { useNavigate } from 'react-router';
 
 const NoteApp = () => {
   const [notes, setNotes] = useState([]);
@@ -14,6 +15,7 @@ const NoteApp = () => {
   const noteListElements = useRef();
   const [loading, setLoading] = useState(true);
   const Alert = withReactContent(Swal);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getActiveNotes(); // active notes
@@ -51,18 +53,13 @@ const NoteApp = () => {
       const result = response.data;
       
       if (result.success) {
-        setLoading(false);
-        showAlert('Success', result.message);
+        showAlert('Success', result.message, 'success', '/active-notes');
       } else {
-        setLoading(false);
         showAlert('Oops', result.message, 'error');
       }
     } catch (error) {
       console.error(error);
     }
-
-    getActiveNotes();
-    getArchivedNotes();
   };
 
   const deleteNote = async (noteId) => {
@@ -138,8 +135,14 @@ const NoteApp = () => {
       });
   }
 
-  const showAlert = (title, message, type = 'success') => {
-    setTimeout(() => Alert.fire(title, message, type).then(() => setLoading(false)), 500);
+  const showAlert = (title, message, type = 'success', navigateTo = null) => {
+    Alert.fire(title, message, type).then(() => {
+      setLoading(false);
+
+      if (navigateTo !== null) {
+        navigate(navigateTo);
+      }
+    });
   }
 
   return (
@@ -151,10 +154,10 @@ const NoteApp = () => {
       <Router
         activeNotes={notes}
         archivedNotes={archivedNotes}
-        addNoteEvent={handleAddNote}
         deleteNote={deleteNote}
         archiveNote={archiveNote}
         noteListElements={noteListElements}
+        addNoteEvent={handleAddNote}
       />
       
     </Container>

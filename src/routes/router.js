@@ -19,7 +19,7 @@ const Router = ({
   return (
     <Routes>
       {/* Homepage */}
-      <Route path='/' exact element={
+        <Route path='/' exact element={
         <ActiveNotes
           notes={activeNotes}
           noteListElements={noteListElements}
@@ -29,7 +29,7 @@ const Router = ({
       } />
 
       {/* Active Notes */}
-      <Route path='/active-notes' exact element={
+        <Route path='/active-notes' exact element={
         <ActiveNotes
           notes={activeNotes}
           noteListElements={noteListElements}
@@ -39,7 +39,7 @@ const Router = ({
       } />
 
       {/* Archived Notes */}
-      <Route path='/archived-notes' exact element={
+        <Route path='/archived-notes' exact element={
         <ArchivedNotes
           notes={archivedNotes}
           noteListElements={noteListElements}
@@ -49,7 +49,9 @@ const Router = ({
       } />
 
 
-      <Route path='/add-note' element={<NoteForm />} />
+      <Route path='/add-note' element={
+        <NoteForm addNoteEvent={addNoteEvent} />
+      } />
     </Routes>
   );
 }
