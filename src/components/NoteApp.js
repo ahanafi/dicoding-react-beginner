@@ -1,20 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Container } from 'react-bootstrap';
 import MenuBar from './MenuBar';
-import NoteList from './NoteList';
-import NoteForm from './NoteForm';
 import Loading from './Loading';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { API_ENDPOINT, apiOptions } from '../api/noteApi';
 import axios from 'axios';
+import Router from '../routes/router';
 
 const NoteApp = () => {
   const [notes, setNotes] = useState([]);
   const [archivedNotes, setArchivedNotes] = useState([]);
-  const [displayForm, setDisplayForm] = useState(false);
-  const activeNoteElements = useRef();
-  const archivedNoteElements = useRef();
+  const noteListElements = useRef();
   const [loading, setLoading] = useState(true);
   const Alert = withReactContent(Swal);
 
@@ -46,8 +43,6 @@ const NoteApp = () => {
 
   const getActiveNotes = async () => getAllNotes(false);
   const getArchivedNotes = async () => getAllNotes(true);
-
-  const handleDisplayForm = (display) => setDisplayForm(display);
 
   const handleAddNote = async (note) => {
     setLoading(true);
@@ -128,10 +123,7 @@ const NoteApp = () => {
     getArchivedNotes();
   }
   
-  const searchNote = (query) => {
-    filterNotes(activeNoteElements.current, query);
-    filterNotes(archivedNoteElements.current, query);
-  }
+  const searchNote = (query) => filterNotes(noteListElements.current, query);
 
   const filterNotes = (el, query) => {
     el.querySelectorAll('.note-title')
@@ -152,40 +144,19 @@ const NoteApp = () => {
 
   return (
     <Container>
-      <MenuBar
-        setDisplayForm={handleDisplayForm}
-        searchNote={searchNote}
-      />
+      <MenuBar searchNote={searchNote} />
 
       <Loading isOpen={loading} />
 
-      <div style={{ display: loading ? 'none' : 'block' }}>
-        <NoteForm
-          style={{ display: displayForm ? 'block' : 'none'}}
-          setDisplayForm={handleDisplayForm}
-          addNoteEvent={handleAddNote}
-          />
-
-        {/* Active Notes */}
-        <h2 className='fw-bold text-white mb-4 fs-2'>Active Notes</h2>
-        <NoteList
-          ref={activeNoteElements}
-          id='active-note-list'
-          notes={notes}
-          deleteNote={deleteNote}
-          archiveNote={archiveNote}
-        />
-
-        {/* Archived Notes */}
-        <h2 className='fw-bold text-white mb-4 fs-2'>Archived Notes</h2>
-        <NoteList
-          ref={archivedNoteElements}
-          id='archived-note-list'
-          notes={archivedNotes}
-          deleteNote={deleteNote}
-          archiveNote={archiveNote}
-        />
-      </div>
+      <Router
+        activeNotes={notes}
+        archivedNotes={archivedNotes}
+        addNoteEvent={handleAddNote}
+        deleteNote={deleteNote}
+        archiveNote={archiveNote}
+        noteListElements={noteListElements}
+      />
+      
     </Container>
   );
 }

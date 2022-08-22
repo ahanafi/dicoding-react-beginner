@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 import { BrowserRouter } from 'react-router-dom';
-import Router from './routes/router';
+import NoteApp from './components/NoteApp';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <React.StrictMode>
-      <Router />
-    </React.StrictMode>
-  </BrowserRouter>
+  <React.StrictMode>
+    <BrowserRouter>
+      <NoteApp />
+    </BrowserRouter>
+  </React.StrictMode>
 );

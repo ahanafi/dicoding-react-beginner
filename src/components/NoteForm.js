@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Card, Form, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
 
-const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
+const NoteForm = ({ addNoteEvent }) => {
   const maxChar = 50;
   const [counter, setCounter] = useState(maxChar);
   const inputTitle = useRef();
@@ -19,7 +17,6 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
 
     addNoteEvent(note);
     resetForm();
-    setDisplayForm(false);
   }
 
   const resetForm = () => {
@@ -34,14 +31,11 @@ const NoteForm = ({ style, setDisplayForm, addNoteEvent }) => {
   }
 
   return (
-    <div style={style} className='w-100 mt-5'>
+    <div className='w-100'>
+    <h2 className='fw-bold text-white mb-4 fs-2'>Add New Notes</h2>
       <Card className='rounded'>
         <Card.Header className='d-flex justify-content-between'>
           <Card.Title className='pt-2'>Add New Note</Card.Title>
-          <Button onClick={() => setDisplayForm(false)} variant='secondary' className='px-3' size='sm'>
-            <FontAwesomeIcon icon={faClose} />
-            <span className='ms-2'>Close Form</span>
-          </Button>
         </Card.Header>
         <Card.Body>
           <Form onSubmit={() => {return false;}} method='post'>
