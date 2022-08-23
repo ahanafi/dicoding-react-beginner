@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Container } from 'react-bootstrap';
+import { API_ENDPOINT, apiOptions } from '../api/noteApi';
+import { useLocation, useNavigate } from 'react-router';
 import MenuBar from './MenuBar';
 import Loading from './Loading';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { API_ENDPOINT, apiOptions } from '../api/noteApi';
 import axios from 'axios';
 import Router from '../routes/router';
-import { useLocation, useNavigate } from 'react-router';
 
 const NoteApp = () => {
   const noteListElements = useRef();
@@ -16,8 +16,10 @@ const NoteApp = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {}, [])
-
+  /**
+   * Handling add new note
+   * @param {object} note 
+   */
   const handleAddNote = async (note) => {
     setLoading(true);
     try {
@@ -34,7 +36,11 @@ const NoteApp = () => {
     }
   };
 
-  const deleteNote = async (noteId) => {
+  /**
+   * Handling delete note
+   * @param {integer} noteId 
+   */
+  const handleDeleteNote = async (noteId) => {
     Alert.fire({
       title:'Confirm Deletion',
       text:'Are you sure want to delete this?',
@@ -59,7 +65,11 @@ const NoteApp = () => {
     })
   }
 
-  const archiveNote = async (noteId) => {
+  /**
+   * Handling archive note
+   * @param {integer} noteId 
+   */
+  const handleArchiveNote = async (noteId) => {
     setLoading(true);
     const response = await axios.get(API_ENDPOINT.NOTES.DETAIL(noteId), apiOptions);
     const note = response.data.data;
@@ -82,8 +92,18 @@ const NoteApp = () => {
     }
   }
   
-  const searchNote = (query) => filterNotes(noteListElements.current, query);
+  /**
+   * Handling search notes
+   * @param {string} query 
+   * @returns void
+   */
+  const handleSearchNote = (query) => filterNotes(noteListElements.current, query);
 
+  /**
+   * Filtering notes by html elements
+   * @param {HTML Element} el 
+   * @param {string} query 
+   */
   const filterNotes = (el, query) => {
     el.querySelectorAll('.note-title')
       .forEach(noteEl => {
@@ -97,6 +117,13 @@ const NoteApp = () => {
       });
   }
 
+  /**
+   * Showing sweetalert
+   * @param {string} title 
+   * @param {string} message 
+   * @param {string} type 
+   * @param {string|null} navigateTo 
+   */
   const showAlert = (title, message, type = 'success', navigateTo = null) => {
     Alert.fire(title, message, type).then(() => {
       setLoading(false);
@@ -109,17 +136,19 @@ const NoteApp = () => {
 
   return (
     <Container>
-      <MenuBar searchNote={searchNote} />
+      <MenuBar searchNoteEvent={handleSearchNote} />
       
-      {loading ? (<Loading isOpen={loading} />) : (<></>)}      
-
-      <Router
-        loader={loading}
-        deleteNote={deleteNote}
-        archiveNote={archiveNote}
-        noteListElements={noteListElements}
-        addNoteEvent={handleAddNote}
-      />
+      {loading ? (<Loading isOpen={loading} />) : (
+        <>
+          <Router
+            loader={loading}
+            noteListElements={noteListElements}
+            deleteNoteEvent={handleDeleteNote}
+            archiveNoteEvent={handleArchiveNote}
+            addNoteEvent={handleAddNote}
+          />
+        </>
+      )}      
       
     </Container>
   );

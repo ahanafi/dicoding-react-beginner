@@ -3,7 +3,7 @@ import { Nav } from 'react-bootstrap';
 import SearchBar from './SearchBar';
 import { NavLink, useLocation } from 'react-router-dom';
 
-const MenuBar = ({ searchNote }) => {
+const MenuBar = ({ searchNoteEvent }) => {
   const classList = `nav-link rounded-pill note-link d-flex align-items-center px-2 px-md-3 mr-0 mr-md-2`;
   const location = useLocation();
   
@@ -56,7 +56,7 @@ const MenuBar = ({ searchNote }) => {
       
       {location.pathname !== '/add-note' ? (
         <li className='nav-item ml-auto'>
-          <SearchBar searchNote={searchNote} />
+          <SearchBar searchNote={searchNoteEvent} />
         </li>
       ) : (
         <></>

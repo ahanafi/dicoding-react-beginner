@@ -5,8 +5,8 @@ import NoteForm from '../components/NoteForm';
 const Router = ({
   /* Notes page properties */
   noteListElements,
-  deleteNote,
-  archiveNote,
+  deleteNoteEvent,
+  archiveNoteEvent,
 
   /* Add notes propertie */
   addNoteEvent
@@ -18,8 +18,8 @@ const Router = ({
         <NotePages
           isArchived={false}
           noteListElements={noteListElements}
-          deleteNote={deleteNote}
-          archiveNote={archiveNote}
+          deleteNote={deleteNoteEvent}
+          archiveNote={archiveNoteEvent}
           />
       } />
 
@@ -28,8 +28,8 @@ const Router = ({
         <NotePages
           isArchived={false}
           noteListElements={noteListElements}
-          deleteNote={deleteNote}
-          archiveNote={archiveNote}
+          deleteNote={deleteNoteEvent}
+          archiveNote={archiveNoteEvent}
           />
       } />
 
@@ -38,8 +38,8 @@ const Router = ({
         <NotePages
           isArchived={true}
           noteListElements={noteListElements}
-          deleteNote={deleteNote}
-          archiveNote={archiveNote}
+          deleteNote={deleteNoteEvent}
+          archiveNote={archiveNoteEvent}
           />
       } />
 
