@@ -1,54 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Container } from 'react-bootstrap';
+import { API_ENDPOINT, apiOptions } from '../api/noteApi';
+import { useLocation, useNavigate } from 'react-router';
 import MenuBar from './MenuBar';
-import NoteList from './NoteList';
-import NoteForm from './NoteForm';
 import Loading from './Loading';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { API_ENDPOINT, apiOptions } from '../api/noteApi';
 import axios from 'axios';
+import Router from '../routes/router';
 
 const NoteApp = () => {
-  const [notes, setNotes] = useState([]);
-  const [archivedNotes, setArchivedNotes] = useState([]);
-  const [displayForm, setDisplayForm] = useState(false);
-  const activeNoteElements = useRef();
-  const archivedNoteElements = useRef();
-  const [loading, setLoading] = useState(true);
+  const noteListElements = useRef();
+  const [loading, setLoading] = useState(false);
   const Alert = withReactContent(Swal);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    getActiveNotes(); // active notes
-    getArchivedNotes(); // archived notes
-
-     //eslint-disable-next-line
-  }, [])
-
-  const getAllNotes = async (isArchived) => {
-    setLoading(true);
-    const url = isArchived ? API_ENDPOINT.NOTES.ARCHIVED : API_ENDPOINT.NOTES.LIST;
-    try {
-      const response = await axios.get(url, apiOptions);
-      const results = response.data.data;
-      
-      if (isArchived) {
-        setArchivedNotes(results.data);
-      } else {
-        setNotes(results.data);
-      }
-      
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const getActiveNotes = async () => getAllNotes(false);
-  const getArchivedNotes = async () => getAllNotes(true);
-
-  const handleDisplayForm = (display) => setDisplayForm(display);
-
+  /**
+   * Handling add new note
+   * @param {object} note 
+   */
   const handleAddNote = async (note) => {
     setLoading(true);
     try {
@@ -56,21 +27,20 @@ const NoteApp = () => {
       const result = response.data;
       
       if (result.success) {
-        setLoading(false);
-        showAlert('Success', result.message);
+        showAlert('Success', result.message, 'success', '/active-notes');
       } else {
-        setLoading(false);
         showAlert('Oops', result.message, 'error');
       }
     } catch (error) {
       console.error(error);
     }
-
-    getActiveNotes();
-    getArchivedNotes();
   };
 
-  const deleteNote = async (noteId) => {
+  /**
+   * Handling delete note
+   * @param {integer} noteId 
+   */
+  const handleDeleteNote = async (noteId) => {
     Alert.fire({
       title:'Confirm Deletion',
       text:'Are you sure want to delete this?',
@@ -84,23 +54,22 @@ const NoteApp = () => {
           const result = response.data;
           
           if (result.success) {
-            setLoading(false);
-            showAlert('Success', result.message);
+            showAlert('Success', result.message, 'success', location.pathname);
           } else {
-            setLoading(false);
             showAlert('Oops', result.message, 'error');
           }
         } catch (error) {
           console.error(error);
         }
-    
-        getActiveNotes();
-        getArchivedNotes();
       }
     })
   }
 
-  const archiveNote = async (noteId) => {
+  /**
+   * Handling archive note
+   * @param {integer} noteId 
+   */
+  const handleArchiveNote = async (noteId) => {
     setLoading(true);
     const response = await axios.get(API_ENDPOINT.NOTES.DETAIL(noteId), apiOptions);
     const note = response.data.data;
@@ -114,25 +83,27 @@ const NoteApp = () => {
       const result = response.data;
       
       if (result.success) {
-        setLoading(false);
-        showAlert('Success', message);
+        showAlert('Success', message, 'success', location.pathname);
       } else {
-        setLoading(false);
         showAlert('Oops', response.message, 'error');
       }
     } catch (error) {
       console.error(error);
     }
-
-    getActiveNotes();
-    getArchivedNotes();
   }
   
-  const searchNote = (query) => {
-    filterNotes(activeNoteElements.current, query);
-    filterNotes(archivedNoteElements.current, query);
-  }
+  /**
+   * Handling search notes
+   * @param {string} query 
+   * @returns void
+   */
+  const handleSearchNote = (query) => filterNotes(noteListElements.current, query);
 
+  /**
+   * Filtering notes by html elements
+   * @param {HTML Element} el 
+   * @param {string} query 
+   */
   const filterNotes = (el, query) => {
     el.querySelectorAll('.note-title')
       .forEach(noteEl => {
@@ -146,46 +117,39 @@ const NoteApp = () => {
       });
   }
 
-  const showAlert = (title, message, type = 'success') => {
-    setTimeout(() => Alert.fire(title, message, type).then(() => setLoading(false)), 500);
+  /**
+   * Showing sweetalert
+   * @param {string} title 
+   * @param {string} message 
+   * @param {string} type 
+   * @param {string|null} navigateTo 
+   */
+  const showAlert = (title, message, type = 'success', navigateTo = null) => {
+    Alert.fire(title, message, type).then(() => {
+      setLoading(false);
+
+      if (navigateTo !== null) {
+        navigate(navigateTo);
+      }
+    });
   }
 
   return (
     <Container>
-      <MenuBar
-        setDisplayForm={handleDisplayForm}
-        searchNote={searchNote}
-      />
-
-      <Loading isOpen={loading} />
-
-      <div style={{ display: loading ? 'none' : 'block' }}>
-        <NoteForm
-          style={{ display: displayForm ? 'block' : 'none'}}
-          setDisplayForm={handleDisplayForm}
-          addNoteEvent={handleAddNote}
+      <MenuBar searchNoteEvent={handleSearchNote} />
+      
+      {loading ? (<Loading isOpen={loading} />) : (
+        <>
+          <Router
+            loader={loading}
+            noteListElements={noteListElements}
+            deleteNoteEvent={handleDeleteNote}
+            archiveNoteEvent={handleArchiveNote}
+            addNoteEvent={handleAddNote}
           />
-
-        {/* Active Notes */}
-        <h2 className='fw-bold text-white mb-4 fs-2'>Active Notes</h2>
-        <NoteList
-          ref={activeNoteElements}
-          id='active-note-list'
-          notes={notes}
-          deleteNote={deleteNote}
-          archiveNote={archiveNote}
-        />
-
-        {/* Archived Notes */}
-        <h2 className='fw-bold text-white mb-4 fs-2'>Archived Notes</h2>
-        <NoteList
-          ref={archivedNoteElements}
-          id='archived-note-list'
-          notes={archivedNotes}
-          deleteNote={deleteNote}
-          archiveNote={archiveNote}
-        />
-      </div>
+        </>
+      )}      
+      
     </Container>
   );
 }
