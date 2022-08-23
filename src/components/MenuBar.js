@@ -14,6 +14,16 @@ const MenuBar = ({ searchNote }) => {
       defaultActiveKey="/home"
       className='p-3 bg-white rounded-pill align-items-center mb-4'
     >
+      {/* Navigate to home page */}
+      <Nav.Item as='li'>
+        <NavLink
+          to='/'
+          className={classList}
+          >
+          Home
+        </NavLink>
+      </Nav.Item>
+
       {/* Navigate to active notes page */}
       <Nav.Item as='li'>
         <NavLink

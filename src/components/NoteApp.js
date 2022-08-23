@@ -7,44 +7,16 @@ import withReactContent from 'sweetalert2-react-content';
 import { API_ENDPOINT, apiOptions } from '../api/noteApi';
 import axios from 'axios';
 import Router from '../routes/router';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 const NoteApp = () => {
-  const [notes, setNotes] = useState([]);
-  const [archivedNotes, setArchivedNotes] = useState([]);
   const noteListElements = useRef();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const Alert = withReactContent(Swal);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    getActiveNotes(); // active notes
-    getArchivedNotes(); // archived notes
-
-     //eslint-disable-next-line
-  }, [])
-
-  const getAllNotes = async (isArchived) => {
-    setLoading(true);
-    const url = isArchived ? API_ENDPOINT.NOTES.ARCHIVED : API_ENDPOINT.NOTES.LIST;
-    try {
-      const response = await axios.get(url, apiOptions);
-      const results = response.data.data;
-      
-      if (isArchived) {
-        setArchivedNotes(results.data);
-      } else {
-        setNotes(results.data);
-      }
-      
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  const getActiveNotes = async () => getAllNotes(false);
-  const getArchivedNotes = async () => getAllNotes(true);
+  useEffect(() => {}, [])
 
   const handleAddNote = async (note) => {
     setLoading(true);
@@ -76,18 +48,13 @@ const NoteApp = () => {
           const result = response.data;
           
           if (result.success) {
-            setLoading(false);
-            showAlert('Success', result.message);
+            showAlert('Success', result.message, 'success', location.pathname);
           } else {
-            setLoading(false);
             showAlert('Oops', result.message, 'error');
           }
         } catch (error) {
           console.error(error);
         }
-    
-        getActiveNotes();
-        getArchivedNotes();
       }
     })
   }
@@ -106,18 +73,13 @@ const NoteApp = () => {
       const result = response.data;
       
       if (result.success) {
-        setLoading(false);
-        showAlert('Success', message);
+        showAlert('Success', message, 'success', location.pathname);
       } else {
-        setLoading(false);
         showAlert('Oops', response.message, 'error');
       }
     } catch (error) {
       console.error(error);
     }
-
-    getActiveNotes();
-    getArchivedNotes();
   }
   
   const searchNote = (query) => filterNotes(noteListElements.current, query);
@@ -148,12 +110,11 @@ const NoteApp = () => {
   return (
     <Container>
       <MenuBar searchNote={searchNote} />
-
-      <Loading isOpen={loading} />
+      
+      {loading ? (<Loading isOpen={loading} />) : (<></>)}      
 
       <Router
-        activeNotes={notes}
-        archivedNotes={archivedNotes}
+        loader={loading}
         deleteNote={deleteNote}
         archiveNote={archiveNote}
         noteListElements={noteListElements}
